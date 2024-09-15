@@ -18,7 +18,6 @@ static ngx_command_t ngx_http_mixin_commands[] = {
     ngx_null_command
 };
 
-
 static char* ngx_http_mixin(ngx_conf_t* cf, ngx_command_t* cmd, void* conf) {
     ngx_http_mixin_t *gcf = conf;
 
@@ -26,6 +25,7 @@ static char* ngx_http_mixin(ngx_conf_t* cf, ngx_command_t* cmd, void* conf) {
     ngx_str_t  server_name = value[1];
     ngx_str_t  listen = value[2];
     ngx_flag_t no_cache = value[3];
+    ngx_str_t  http_service = value[4];
 
     if (server_name == NULL || listen == NULL) {
         return NGX_CONF_ERROR;
@@ -47,7 +47,19 @@ static char* ngx_http_mixin(ngx_conf_t* cf, ngx_command_t* cmd, void* conf) {
 
     if (no_cache == true) {
         default_conf = default_conf + "add_header Last-Modified  $date_gmt;\n";
-        default_conf = default_conf + "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0;\n";
+        default_conf = default_conf + "add_header Cache-Control  no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0;\n";
+    }
+
+    if (http_service != NULL) {
+        default_conf = default_conf + "location / {\n";
+        default_conf = default_conf + "proxy_set_header   Host $http_host;\n";
+        default_conf = default_conf + "proxy_set_header   X-Forwarded-Proto $scheme;\n";
+        default_conf = default_conf + "proxy_set_header   X-Real-IP $remote_addr;\n";
+        default_conf = default_conf + "proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n";
+        default_conf = default_conf + "proxy_http_version 1.1;\n";
+        default_conf = default_conf + "proxy_set_header   Connection "";\n";
+        default_conf = default_conf + "proxy_pass         http://" + http_service + "/;\n"
+        default_conf = default_conf + "}\n";
     }
 
     ngx_sprintf(config_directive.data, default_conf, &listen, &listen, &server_name, &server_name, &server_name);

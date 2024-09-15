@@ -9,6 +9,7 @@ typedef struct {
     ngx_str_t   server_name;
     ngx_int_t   listen;
     ngx_flag_t  no_cache;
+    ngx_str_t   http_service;
 } ngx_http_mixin_t;
 
 // typedef struct {
