@@ -5,6 +5,8 @@
 #include <ngx_core.h>
 #include <ngx_http.h>
 
+#define MAX_CONF_SIZE 2048;
+
 typedef struct {
     ngx_str_t   server_name;
     ngx_int_t   listen;
