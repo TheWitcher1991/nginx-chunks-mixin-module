@@ -7,7 +7,6 @@
 
 typedef struct {
     ngx_str_t  server_name;
-    ngx_str
     ngx_int_t  listen;
 } ngx_http_mixin_t;
 
