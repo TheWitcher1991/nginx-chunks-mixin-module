@@ -38,10 +38,10 @@ static char* ngx_http_mixin(ngx_conf_t* cf, ngx_command_t* cmd, void* conf) {
     string default_conf = "";
 
     default_conf = default_conf + "listen %V ssl;\nlisten [::]:%V ssl;\nserver_name %V;\nhttp2 on;\n";
-    default_conf = default_conf + "ssl_protocols TLSv1.2 TLSv1.3;\n";
-    default_conf = default_conf + "ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;";
+    default_conf = default_conf + "ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;\n";
     default_conf = default_conf + "ssl_certificate /etc/letsencrypt/live/%V/fullchain.pem;\n";
     default_conf = default_conf + "ssl_certificate_key /etc/letsencrypt/live/%V/privkey.pem;\n";
+    default_conf = default_conf + "ssl_protocols TLSv1.2 TLSv1.3;\n";
     // default_conf = default_conf + "ssl_session_timeout 5m;\n";
     // default_conf = default_conf + "ssl_prefer_server_ciphers on;\n";
 
